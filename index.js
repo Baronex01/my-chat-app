@@ -33,7 +33,7 @@ app.use(cors({
   'http://127.0.0.1:5173',
   'http://localhost:5173',
   'http://localhost:5050',
-  'https://my-chat-app.o2v9.onrender.com'],credentials:true,
+  'https://my-chat-app-o2v9.onrender.com'],credentials:true,
   methods:['GET','POST','OPTIONs'],
   allowedHeaders:['Content-Type','Authorization'],
   maxAge: 86400
