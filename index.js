@@ -1,5 +1,6 @@
-import fs from "fs";
 
+
+import fs from "fs";
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -24,16 +25,24 @@ const port = process.env.PORT ||  5050;
 const databaseURL = process.env.ATLAS_URL;
 
 
-// For development, allow all origins. Change to process.env.ORIGIN for production.
+
+
+
 app.use(cors({
-    origin: (origin, callback) => callback(null, true),
-    methods:["GET","POST","PUT","PATCH","DELETE"],
-    credentials:true,
+  origin:['https://vivid-chat-app.vercel.app',
+  'http://127.0.0.1:5173',
+  'http://localhost:5173',
+  'http://localhost:5050',
+  'https://my-chat-app.o2v9.onrender.com'],credentials:true,
+  methods:['GET','POST','OPTIONs'],
+  allowedHeaders:['Content-Type','Authorization'],
+  maxAge: 86400
 }));
 
 
 app.use("/uploads/profiles", express.static("uploads/profiles"));
 app.use("/uploads/files",express.static("uploads/files"));
+
 
 app.use(cookieParser());
 app.use(express.json({ limit: '10mb' }));
@@ -43,7 +52,12 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'ok' });
 });
 
-// Mount AuthRoutes only once
+// Root route for Render and browser
+app.get('/', (req, res) => {
+  res.send('API is running');
+});
+
+
 app.use("/api/auth", AuthRoutes);
 app.use("/api/contacts", ContactRoutes);
 app.use("/api/messages", messagesRoutes);
@@ -59,7 +73,6 @@ app.use((err, req, res, next) => {
 const server =  app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
-
 
 setupSocket(server)
 
